@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Account - {{username}}{% endblock %}
+
+{% block body %}
+<div class="topnav">
+  <a href="/">Home</a>
+  <a href="/translator">Translator</a>
+  <a class="current" href="/account">Account</a>
+  <a href="/settings">Settings</a>
+  <a href="/saved-translations">Saved Translations</a>
+  <a href="/help">Help</a>
+  <a href="/about">About</a>
+</div>
+
+{% if just_changed_password %}
+  <p class="good-message" id="password-change-successful">Password change is successful.</p>
+{% endif %}
+
+<h1>Account</h1>
+<h2>Username: {{username}}</h2>
+<hr>
+
+<a href="change-password"><button>Change Password</button></a>
+<br>
+<br>
+<a href="/log-out"><button id="log-out">Log Out</button></a>
+
+<hr>
+
+{% endblock %}

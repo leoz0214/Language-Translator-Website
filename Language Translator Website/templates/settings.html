@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Settings - {{username}}{% endblock %}
+{% block head %}
+  {{super()}}
+  <script src="{{ url_for('static', filename='settings.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="topnav">
+  <a href="/">Home</a>
+  <a href="/translator">Translator</a>
+  <a href="/account">Account</a>
+  <a class="current" href="/settings">Settings</a>
+  <a href="/saved-translations">Saved Translations</a>
+  <a href="/help">Help</a>
+  <a href="/about">About</a>
+</div>
+
+{% if just_updated_settings %}
+  <p class="good-message" id="settings-update-successful">Successfully updated settings.</p>
+{% elif just_reset_settings_to_default %}
+  <p class="good-message" id="settings-reset-successful">Successfully reset settings to default.</p>
+{% elif invalid_settings %}
+  <p class="bad-message" id="invalid-settings">Invalid settings - criteria not followed.</p>
+{% elif error %}
+  <p class="bad-message" id="error">An error occured. If you did not tamper with the website code, sorry for the inconvenience. Otherwise, what did you expect?</p>
+{% endif %}
+
+<h1>Settings</h1>
+<h2>{{username}}</h2>
+<hr>
+
+<form action="/settings" method="post">
+  <details>
+    <summary id="select-languages-summary">Select Languages</summary>
+    {% for line in select_languages_guidance.split("\n") %}
+      <span>{{line}}</span><br>
+    {% endfor %}
+    <br>
+    <div class="grid-container" id="languages-grid">
+      {% for language in all_languages %}
+        <div class="unselectable">
+          {% if language in selected_langs %}
+            <input class="settings-language" name="{{language}}" id="{{language}}" type="checkbox" onchange="checkSelectedLanguages();" checked>
+          {% else %}
+            <input class="settings-language" name="{{language}}" id="{{language}}" type="checkbox" onchange="checkSelectedLanguages();">
+          {% endif %}
+          <label class="settings-language-label" for="{{language}}">{{language}}</label>
+        </div>
+      {% endfor %}
+    </div>
+    <p id="language-count"></p>
+    <button type="button" id="select-all-languages" onclick="selectAllLanguages();">Select all</button>
+    <button type="button" id="deselect-all-languages" onclick="deselectAllLanguages();">Deselect all</button>
+  </details>
+
+  <details>
+    <summary id="default-languages-summary">Default Languages</summary>
+    {% for line in default_languages_guidance.split("\n") %}
+      <span>{{line}}</span><br>
+    {% endfor %}
+
+    <h2>Default language to translate from:</h2>
+    <select name="default-from-language-selection" id="default-from-language-selection">
+      {% for language in ["Detect Language"] + selected_langs %}
+        <option id="from-{{language}}" {% if language == default_from %}selected{% endif %}>{{language}}</option>
+      {% endfor %}
+    </select>
+
+    <h2>Default language to translate to:</h2>
+    <select name="default-to-language-selection" id="default-to-language-selection">
+      {% for language in selected_langs %}
+        <option id="to-{{language}}"  {% if language == default_to %}selected{% endif %}>{{language}}</option> 
+      {% endfor %}
+    </select>
+  </details>
+
+  <details>
+    <summary id="character-limit-summary">Character Limit</summary>
+    {% for line in character_limit_guidance.split("\n") %}
+      <span>{{line}}</span><br>
+    {% endfor %}
+
+    <h2>Character limit:</h2>
+    <input type="range" min="100" max="10000" step="100" name="character-limit" id="character-limit" value="{{character_limit}}" oninput="this.nextElementSibling.value = this.value;">
+    <output>{{character_limit}}</output>
+  </details>
+
+  <hr>
+
+  <input type="submit" value="Update Settings" id="update-settings">
+  <br>
+  <button type="button" id="reset-to-default" onclick="resetSettingsToDefault();">Reset to Default</button>
+</form>
+
+<script>
+  checkLanguageCount();
+  trackChanges();
+</script>
+{% endblock %}

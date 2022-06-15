@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Translator{% endblock %}
+{% block head %}
+  {{ super() }}
+  <script>
+    const maxSourceTextLength = {{character_limit | tojson}};
+    const selectedLanguages = {{ to_langs | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='translator.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+{% if username %}
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a class="current" href="/translator">Translator</a>
+    <a href="/account">Account</a>
+    <a href="/settings">Settings</a>
+    <a href="/saved-translations">Saved Translations</a>
+    <a href="/help">Help</a>
+    <a href="/about">About</a>
+  </div>
+
+  <h1>Translator</h1>
+  <h2>Logged in as: {{username}}</h2>
+  <hr>
+
+  <div class="grid-container" id="translator-container">
+
+    <div id="from-lang-div">
+      <button id="from-lang" class="unselectable" onclick="configFromLanguagesSelection();">{{starting_from_lang}}</button>
+      <select id="from-lang-selection" onchange="changeFromLanguage();" style="visibility: hidden;">
+        {% for language in from_langs %} 
+          <option id="from-{{language}}" {% if language == starting_from_lang %}selected{% endif %}>{{language}}</option>
+        {% endfor %}
+      </select>
+      <textarea rows="15" id="src-text" spellcheck="false"></textarea>
+      <button id="clear-source-text" onclick="clearSourceText();" disabled>Clear source text</button>
+      <p id="character-count">Character count: 0 / {{character_limit}}</p>
+    </div>
+  
+    <button id="invert-languages" onclick="invertLanguages();" {% if starting_from_lang == "Detect Language" %}disabled{% endif %}>↔</button>
+  
+    <div id="to-lang-div">
+      <button id="to-lang" class="unselectable" onclick="configToLanguagesSelection();">{{starting_to_lang}}</button>
+      <select id="to-lang-selection" onchange="changeToLanguage();" style="visibility: hidden;">
+        {% for language in to_langs %} 
+          <option id="to-{{language}}" {% if language == starting_to_lang %}selected{% endif %}>{{language}}</option>
+        {% endfor %}
+      </select>
+      <p id="translated-text"></p>
+      <button id="copy-translation" onclick="copyTranslation();" disabled>Copy translation</button>
+      <button id="open-save-translation-button" onclick="openSaveTranslation();" disabled>Save translation</button>
+      <div id="save-translation" hidden>
+        <label for="new-saved-translation-name">New saved translation name:</label>
+        <input type="text" name="new-saved-translation-name" id="new-saved-translation-name">
+        <p id="new-saved-translation-status" hidden></p>
+        
+        <br>
+        <button id="save-translation-button" onclick="checkNewSavedTranslationNameExistence();" disabled>Save</button>
+        <br>
+        <br>
+        <button id="clear-save-translation" onclick="clearSaveTranslation();" disabled>Clear</button>
+        <br>
+        <br>
+        <button id="close-save-translation" onclick="closeSaveTranslation();">Close</button>
+        <p>Maximum 128 characters. Must not already be a name in use by you.</p>
+      </div>
+    </div>
+  
+  </div>
+
+{% else %}
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a class="current" href="/translator">Translator</a>
+    <a href="/sign-up">Sign Up</a>
+    <a href="/login">Log In</a>
+    <a href="/help">Help</a>
+    <a href="/about">About</a>
+  </div>
+
+  <h1>Translator</h1>
+  <h2><em>Not logged in</em></h2>
+
+  <div class="grid-container" id="translator-container">
+
+    <div id="from-lang-div">
+      <button id="from-lang" class="unselectable" onclick="configFromLanguagesSelection();">Detect Language</button>
+      <select id="from-lang-selection" onchange="changeFromLanguage();" style="visibility: hidden;">
+        {% for language in from_langs %} 
+          <option id="from-{{language}}" {% if language == "Detect Language" %}selected{% endif %}>{{language}}</option>
+        {% endfor %}
+      </select>
+      <textarea rows="15" id="src-text" spellcheck="false"></textarea>
+      <button id="clear-source-text" onclick="clearSourceText();" disabled>Clear source text</button>
+      <p id="character-count">Character count: 0 / 10000</p>
+    </div>
+  
+    <button id="invert-languages" onclick="invertLanguages();" disabled>↔</button>
+  
+    <div id="to-lang-div">
+      <button id="to-lang" class="unselectable" onclick="configToLanguagesSelection();">English</button>
+      <select id="to-lang-selection" onchange="changeToLanguage();" style="visibility: hidden;">
+        {% for language in to_langs %} 
+          <option id="to-{{language}}" {% if language == "English" %}selected{% endif %}>{{language}}</option>
+        {% endfor %}
+      </select>
+      <p id="translated-text"></p>
+      <button id="copy-translation" onclick="copyTranslation();" disabled>Copy translation</button>
+    </div>
+  
+  </div>
+
+{% endif %}
+<hr>
+<script>trackChanges();</script>
+{% endblock %}

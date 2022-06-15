@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block body %}
+{% if username %}
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/translator">Translator</a>
+    <a href="/account">Account</a>
+    <a href="/settings">Settings</a>
+    <a href="/saved-translations">Saved Translations</a>
+    <a href="/help">Help</a>
+    <a class="current" href="/about">About</a>
+  </div>
+{% else %}
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/translator">Translator</a>
+    <a href="/sign-up">Sign Up</a>
+    <a href="/login">Log In</a>
+    <a href="/help">Help</a>
+    <a class="current" href="/about">About</a>
+  </div>
+{% endif %}
+
+<h1>About</h1>
+
+<details>
+  <summary>Credits</summary>
+  <p>This website was fully developed by <strong>Leo Zhang</strong> for the Bronze Duke of Edinburgh skills section as part of web development.</p>
+  <p>The translator is provided by the Python 3rd party library called <a href="https://pypi.org/project/googletrans/" target="_blank">googletrans</a>.</p>
+</details>
+
+<details>
+  <summary>About</summary>
+  <p>This website was developed as the final project for my Bronze Duke of Edinburgh skills section.</p>
+  <p>It consists of over 2000 lines of code and utilises the following technologies:</p>
+  <ul>
+    <li><strong>Python</strong> - a high level programming language. The flask module is used in particular to create a web server.</li>
+    <li><strong>HTML</strong> - the skeleton of the website - displaying headings, text, etc.</li>
+    <li><strong>CSS</strong> - controls the appearance of the website and makes it look decent.</li>
+    <li><strong>JavaScript</strong> - allows things to occur on the website. Makes the website dynamic.</li>
+  </ul>
+  <p>All of the above play an important part in this website, and without any of them, the website would be horrible, and possibly not even creatable!</p>
+</details>
+
+
+<hr>
+
+{% endblock %}
