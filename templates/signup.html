@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block head %}
+  {{super()}}
+  <script src="{{ url_for('static', filename='signup.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="topnav">
+  <a href="/">Home</a>
+  <a href="/translator">Translator</a>
+  <a class="current" href="/sign-up">Sign Up</a>
+  <a href="/login">Log In</a>
+  <a href="/help">Help</a>
+  <a href="/about">About</a>
+</div>
+
+{% if username_now_taken %}
+  <p class="bad-message" id="username-now-taken">Unfortunately, the username you submitted is now taken since the last check. Sorry for the inconvenience.</p>
+{% elif invalid_credentials %}
+  <p class="bad-message" id="invalid-credentials">Invalid credentials - criteria not followed.</p>
+{% elif error %}
+  <p class="bad-message" id="error">An error occured. If you did not tamper with the website code, sorry for the inconvenience. Otherwise, what did you expect?</p>
+{% endif %}
+
+<h1>Sign Up</h1>
+<details>
+  <summary>Username Guidance</summary>
+  <ul>
+    {% for line in username_guidance.split("\n") %}
+      <li>{{line}}</li>
+    {% endfor %}
+  </ul>
+</details>
+<details>
+  <summary>Password Guidance</summary>
+  <ul>
+    {% for line in password_guidance.split("\n") %}
+      <li>{{line}}</li>
+    {% endfor %}
+  </ul>
+</details>
+<hr>
+
+<form action="/sign-up" method="post" autocomplete="off">
+  <div class="grid-container" id="sign-up-grid">
+    <label for="username">Username:</label>
+    <div>
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <p class="credentials-status" id="username-status"></p>
+    </div>
+
+    <label for="password">Password:</label>
+    <div>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <p class="credentials-status" id="password-status"></p>
+    </div>
+
+    <label for="confirm-password">Confirm Password:</label>
+    <div>
+      <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required>
+      <p class="credentials-status" id="confirm-password-status"></p>
+    </div>
+  </div>
+
+  <input type="submit" value="Sign Up" id="sign-up-submit" disabled>
+  <br>
+  <input type="reset" value="Clear" id="sign-up-reset" onclick="clearSignUpForm();">
+</form>
+<hr>
+
+<p>Already have account? Log in <a href="/login">here</a>.</p>
+
+<script>trackChanges();</script>
+{% endblock %}

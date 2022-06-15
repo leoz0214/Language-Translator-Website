@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+{% if username %} 
+  <div class="topnav">
+    <a class="current" href="/">Home</a>
+    <a href="/translator">Translator</a>
+    <a href="/account">Account</a>
+    <a href="/settings">Settings</a>
+    <a href="/saved-translations">Saved Translations</a>
+    <a href="/help">Help</a>
+    <a href="/about">About</a>
+  </div>
+
+  {% if just_signed_up %}
+    <p class="good-message" id="sign-up-successful">Sign up is successful. Best of luck, {{username}}</p>
+  {% elif just_logged_in %}
+    <p class="good-message" id="login-successful">Login is successful. Best of luck, {{username}}</p>
+  {% endif %}
+
+  <h1>Home</h1>
+  <hr>
+  <p>Welcome to this website, where you can translate text from one language to another.</p>
+  <p><strong>You are currently logged in as: {{username}}</strong>. Here are some pages of the current site:</p>
+  <ul>
+    <li>The <a href="/translator">translator</a> itself. This is where the translation takes place.</li>
+    <li>The <a href="/account">account</a> page. This is where you can interact with your account, including logging out.</li>
+    <li>The <a href="/settings">settings</a> page. This is where you can customize your experience with the translator.</li>
+    <li>The <a href="/saved-translations">saved translations</a> page. This is where you can view and interact with previous translations you have kept.
+        This can be convenient if you want to access a translation repeatedly but do not want to have to translate the same text again and again.
+    </li>
+    <li>The <a href="/help">help</a> page. This is where you can obtain more information on how to use this website.</li>
+    <li>The <a href="/about">about</a> page. This is where you can find out about more about the website, including any credits.</li>
+  </ul>
+
+  <p id="happy-translating">Happy translating!</p>
+  <img id="hello-image" src="{{ url_for('static', filename='hello.png') }}" alt="Hello in many languages">
+  <hr>
+
+{% else %}
+  <div class="topnav">
+    <a class="current" href="/">Home</a>
+    <a href="/translator">Translator</a>
+    <a href="/sign-up">Sign Up</a>
+    <a href="/login">Log In</a>
+    <a href="/help">Help</a>
+    <a>About</a>
+  </div>
+
+  {% if just_logged_out %}
+    <p class="good-message" id="log-out-successful">Log out is successful.</p>  
+  {% endif %}
+
+  <h1>Home</h1>
+  <hr>
+  <p>Welcome to this website, where you can translate text from one language to another.</p>
+  <p><strong>You are currently not logged in</strong>. Here are some pages of the current site:</p>
+  <ul>
+    <li>The <a href="/translator">translator</a> itself. This is where the translation takes place.</li>
+    <li>The <a href="/sign-up">sign-up</a> page. This is where you can create an account.</li>
+    <li>The <a href="/login">login</a> page. This is where you can sign into your account.</li>
+    <li>The <a href="/help">help</a> page. This is where you can obtain more information on how to use this website.</li>
+    <li>The <a href="/about">about</a> page. This is where you can find out about more about the website, including any credits.</li>
+  </ul>
+  <p id="happy-translating">Happy translating!</p>
+  <img id="hello-image" src="{{ url_for('static', filename='hello.png') }}" alt="Hello in many languages">
+  <hr>
+
+{% endif %}
+
+{% endblock %}

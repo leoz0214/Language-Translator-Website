@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Saved Translation - {{name}}{% endblock %}
+{% block head %}
+  {{super()}}
+  <script src="{{ url_for('static', filename='savedtranslation.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<a href="/saved-translations">< Back to saved translations</a>
+
+<h1>Saved Translation</h1>
+<p><strong>Name:</strong> {{name}}</p>
+<p><strong>Date and time created (UTC) (YYYY-MM-DD hh:mm:ss)</strong>: {{datetime}}</p>
+<p><strong>File size (2 decimal places):</strong> {{file_size}}KB</p>
+<p><strong>Source text character count:</strong> {{source_text_length}}</p>
+<p><strong>Translation character count:</strong> {{translation_length}}</p>
+<button onclick="deleteSavedTranslation();">Delete translation</button>
+<hr>
+
+<details open>
+  <summary><strong>From: {{from_lang}}</strong></summary>
+  <div id="src-text">
+    {% for line in source_text.split("\n") %}
+      <span>{{line}}</span><br>
+    {% endfor %}
+  </div>
+  <br>
+  <button onclick="copyText(document.getElementById('src-text').innerText);">Copy source text</button>
+</details>
+
+<details open>
+  <summary><strong>To: {{to_lang}}</strong></summary>
+  <div id="translation">
+    {% for line in translation.split("\n") %}
+      <span>{{line}}</span><br>
+    {% endfor %}
+  </div>
+  <br>
+  <button onclick="copyText(document.getElementById('translation').innerText);">Copy translation</button>
+</details>
+
+<hr>
+{% endblock %}
